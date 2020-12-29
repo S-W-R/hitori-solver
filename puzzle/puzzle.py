@@ -28,11 +28,17 @@ class Puzzle:
     def game_field(self) -> Matrix[Cell]:
         return self._game_field
 
-    def point_in_game_field(self, point: Point) -> Iterable[Point]:
+    def point_in_game_field(self, point: Point) -> bool:
+        return 0 <= point.x < self.width and 0 <= point.y < self.height
 
     def get_near_points_with_point(self, point: Point) -> Iterable[Point]:
         for near_pos in NEAR_POSITION:
             new_point = point + near_pos
+            if self.point_in_game_field(new_point):
+                yield new_point
+
+    def get_near_points_with_cord(self, x, y) -> Iterable[Point]:
+        return self.get_near_points_with_point(Point(x, y))
 
     def clone_puzzle(self) -> 'Puzzle':
         new_matrix = Matrix(self.width, self.height)

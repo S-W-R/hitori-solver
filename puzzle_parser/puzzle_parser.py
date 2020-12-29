@@ -29,9 +29,7 @@ class PuzzleParser(metaclass=Singleton):
         return Puzzle(game_field)
 
     def _cell_from_symbol(self, pos: Point, char: str) -> Cell:
-        if char == '+':
-            return Cell(position=pos, cell_type=CellType.DISABLED, value=-1)
-        elif char == ' ':
+        if char == ' ':
             return Cell(position=pos, cell_type=CellType.DELETED, value=-1)
         elif char.isdigit():
             return Cell(position=pos, cell_type=CellType.NUMBER,

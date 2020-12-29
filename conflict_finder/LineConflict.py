@@ -1,11 +1,9 @@
 from typing import Iterable
-
-from conflict_finder.conflict import Conflict
 from conflict_finder.conflict_type import ConflictType
 from geometry.point import Point
 
 
-class LineConflict(Conflict):
+class LineConflict:
     CONFLICT_TYPE = ConflictType.MORE_THAN_ONE_IN_LINE
 
     def __init__(self, points: Iterable[Point]):
