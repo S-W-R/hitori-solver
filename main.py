@@ -1,8 +1,8 @@
 import argparse
 from typing import Iterable
 
-from conflict_finder.conflict_finder import ConflictFinder
 from puzzle_parser.puzzle_parser import PuzzleParser
+from puzzle_solver.puzzle_solver import PuzzleSolver
 from ui.console_ui import ConsoleUi
 
 
@@ -41,11 +41,14 @@ def main():
     puzzle = puzzle_parser.parse_from_lines_with_size(width=width,
                                                       height=height,
                                                       lines=lines)
-    conflict_finder = ConflictFinder()
+
     print()
+    print('initial puzzle:')
     console_ui.print_puzzle(puzzle)
-    print(f'can be solved: {not conflict_finder.puzzle_unsolvable(puzzle)}')
-    print(f'solved: {conflict_finder.puzzle_solved(puzzle)}')
+    puzzle_solver = PuzzleSolver()
+    solved_puzzle = puzzle_solver.solve_puzzle(puzzle)
+    print()
+    console_ui.print_solution(solved_puzzle)
 
 
 if __name__ == '__main__':

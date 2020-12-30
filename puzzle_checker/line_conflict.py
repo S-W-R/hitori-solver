@@ -1,5 +1,5 @@
 from typing import Iterable
-from conflict_finder.conflict_type import ConflictType
+from puzzle_checker.conflict_type import ConflictType
 from geometry.point import Point
 
 

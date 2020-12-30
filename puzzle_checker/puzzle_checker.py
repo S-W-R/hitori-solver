@@ -1,14 +1,14 @@
 from collections import deque
-from typing import Set, Iterable
+from typing import Set, Iterable, List
 
-from conflict_finder.LineConflict import LineConflict
+from puzzle_checker.line_conflict import LineConflict
 from entities.cell_type import CellType
 from geometry.point import Point
 from misc.singleton import Singleton
 from puzzle.puzzle import Puzzle
 
 
-class ConflictFinder(metaclass=Singleton):
+class PuzzleChecker(metaclass=Singleton):
     def __init__(self):
         pass
 
@@ -22,6 +22,12 @@ class ConflictFinder(metaclass=Singleton):
                 or not self.cells_connected(puzzle))
 
     def find_line_conflicts(self, puzzle: Puzzle) -> Iterable[LineConflict]:
+        h_conflicts = self._find_horizontal_conflicts(puzzle)
+        v_conflicts = self._find_vertical_conflicts(puzzle)
+        h_conflicts.extend(v_conflicts)
+        return h_conflicts
+
+    def _find_vertical_conflicts(self, puzzle: Puzzle) -> List[LineConflict]:
         line_conflicts = []
         for x in range(puzzle.width):
             known_values = dict()
@@ -37,6 +43,10 @@ class ConflictFinder(metaclass=Singleton):
             for positions in known_values.values():
                 if len(positions) > 1:
                     line_conflicts.append(LineConflict(positions))
+        return line_conflicts
+
+    def _find_horizontal_conflicts(self, puzzle: Puzzle) -> List[LineConflict]:
+        line_conflicts = []
         for y in range(puzzle.height):
             known_values = dict()
             for x in range(puzzle.width):
@@ -51,7 +61,6 @@ class ConflictFinder(metaclass=Singleton):
             for positions in known_values.values():
                 if len(positions) > 1:
                     line_conflicts.append(LineConflict(positions))
-
         return line_conflicts
 
     def contains_near_deleted(self, puzzle: Puzzle) -> bool:
@@ -62,7 +71,7 @@ class ConflictFinder(metaclass=Singleton):
                 cell = game_matrix[point]
                 if cell.cell_type == CellType.DELETED:
                     for near_point in puzzle.get_near_points_with_point(point):
-                        near_cell = game_matrix[point + near_point]
+                        near_cell = game_matrix[near_point]
                         if near_cell.cell_type == CellType.DELETED:
                             return True
         return False

@@ -1,14 +1,14 @@
 from entities.cell_type import CellType
 from misc.singleton import Singleton
 from puzzle.puzzle import Puzzle
+from puzzle.puzzle_state import PuzzleState
 
 
 class ConsoleUi(metaclass=Singleton):
     def __init__(self):
         pass
 
-    @staticmethod
-    def print_puzzle(puzzle: Puzzle):
+    def print_puzzle(self, puzzle: Puzzle):
         border = f'+{"-" * puzzle.width}+'
         print(border)
         for y in range(puzzle.height):
@@ -26,3 +26,12 @@ class ConsoleUi(metaclass=Singleton):
             line += '|'
             print(line)
         print(border)
+
+    def print_solution(self, puzzle: Puzzle):
+        if puzzle.puzzle_state == PuzzleState.UNSOLVABLE:
+            print('puzzle is unsolvable')
+        elif puzzle.puzzle_state == PuzzleState.SOLVED:
+            print('solution: ')
+            self.print_puzzle(puzzle)
+        else:
+            raise AttributeError('unknown puzzle state')

@@ -1,20 +1,25 @@
 from copy import copy
-from typing import Iterable
+from typing import Iterable, NoReturn
 
 from const.rules import NEAR_POSITION
 from entities.cell import Cell
 from geometry.matrix import Matrix
 from geometry.point import Point
+from puzzle.puzzle_state import PuzzleState
 
 
 class Puzzle:
     def __init__(self, game_field: Matrix[Cell]):
         self._game_field = game_field
-        self._solved = False
+        self._puzzle_state = PuzzleState.UNKNOWN
 
     @property
-    def solved(self):
-        return self._solved
+    def puzzle_state(self) -> PuzzleState:
+        return self._puzzle_state
+
+    @puzzle_state.setter
+    def puzzle_state(self, value: PuzzleState) -> NoReturn:
+        self._puzzle_state = value
 
     @property
     def width(self) -> int:
